@@ -1,0 +1,2 @@
+export const ADD_MOVIES='ADD_MOVIES'
+export const DELETE_PRODUCTS='DELETE_PRODUCTS'

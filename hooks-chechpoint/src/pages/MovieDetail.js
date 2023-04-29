@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/anchor-has-content */
 import {  useNavigate ,useParams } from "react-router-dom";
-import Movies from "../data/Data";
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const MovieDetail = () => {
+  const {movies} = useSelector (state=>state.movies)
     const back= useNavigate()
   const { id } = useParams();
-  const find = Movies.find((movie) => movie.id === parseInt(id));
+  const find = movies.find((movie) => movie.id === parseInt(id));
 
   return (
     <>

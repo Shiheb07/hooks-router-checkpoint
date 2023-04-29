@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import Movies from '../data/Data';
 import MovieCard from '../components/MovieCard';
 import { TextField, Button } from '@mui/material';
+import { useSelector,useDispatch } from 'react-redux';
+import { addMovies } from '../redux/action/movieAction';
 
 function MovieList() {
-  const [movies, setMovies] = useState(Movies);
+  const {movies} = useSelector (state=>state.movies)
+  console.log(movies)
   const [searchTitle, setSearchTitle] = useState('');
   const [newMovie, setNewMovie] = useState({
     title: '',
@@ -12,22 +14,16 @@ function MovieList() {
     imageUrl: '',
     rating: ''
   });
-
-  const handleSearchTitleChange = (event) => {
-    setSearchTitle(event.target.value.toLowerCase());
-  };
+const dispatch=useDispatch()
 
   const handleNewMovieChange = (event) => {
     const { name, value } = event.target;
     setNewMovie(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleAddMovie = () => {
-    setMovies(prevMovies => [...prevMovies, { ...newMovie, id: prevMovies.length + 1 }]);
-    setNewMovie({ title: '', director: '', imageUrl: '', rating: '' });
-  };
 
-  const filteredMovies = movies.filter(movie => movie.title.toLowerCase().includes(searchTitle));
+
+  const filteredMovies = movies.filter(movie => movie.title.toLowerCase().includes(searchTitle.toLowerCase()));
 
   return (
     <>
@@ -36,7 +32,7 @@ function MovieList() {
         label="Search"
         variant="outlined"
         value={searchTitle}
-        onChange={handleSearchTitleChange}
+        onChange={(e)=>setSearchTitle(e.target.value)}
       />
       <div className="container">
         {filteredMovies.map(movie => (
@@ -50,8 +46,8 @@ function MovieList() {
           <TextField label="Director" variant="outlined" name="director" value={newMovie.director} onChange={handleNewMovieChange} />
           <TextField label="Image URL" variant="outlined" name="imageUrl" value={newMovie.imageUrl} onChange={handleNewMovieChange} />
           <TextField label="Rating" variant="outlined" name="rating" value={newMovie.rating} onChange={handleNewMovieChange} />
-          <Button onClick={handleAddMovie}>Add</Button>
-        </div>
+          <Button onClick={() => dispatch(addMovies(newMovie))}>Add</Button>
+          </div>
       </div>
     </>
   );
